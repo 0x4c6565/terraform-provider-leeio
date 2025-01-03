@@ -71,7 +71,7 @@ func (d *IPDataSource) Read(ctx context.Context, req datasource.ReadRequest, res
 	}
 
 	var address string
-
+	tflog.Trace(ctx, "Retrieving IP address")
 	hresp, err := d.client.R().
 		SetSuccessResult(&address).
 		SetHeader("Accept", "application/json").
@@ -86,6 +86,7 @@ func (d *IPDataSource) Read(ctx context.Context, req datasource.ReadRequest, res
 	data.Address = types.StringValue(address)
 
 	var ipv4Address string
+	tflog.Trace(ctx, "Retrieving IPv4 address")
 	hresp, err = d.client.R().
 		SetSuccessResult(&ipv4Address).
 		SetHeader("Accept", "application/json").
@@ -99,6 +100,7 @@ func (d *IPDataSource) Read(ctx context.Context, req datasource.ReadRequest, res
 	}
 
 	var ipv6Address string
+	tflog.Trace(ctx, "Retrieving IPv6 address")
 	hresp, err = d.client.R().
 		SetSuccessResult(&ipv6Address).
 		SetHeader("Accept", "application/json").
@@ -110,8 +112,6 @@ func (d *IPDataSource) Read(ctx context.Context, req datasource.ReadRequest, res
 	} else {
 		data.AddressIPv6 = types.StringValue(ipv6Address)
 	}
-
-	tflog.Trace(ctx, "read a data source")
 
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
 }
